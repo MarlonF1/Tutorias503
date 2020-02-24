@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-02-2020 a las 00:56:42
+-- Tiempo de generación: 24-02-2020 a las 01:14:41
 -- Versión del servidor: 10.4.6-MariaDB-log
 -- Versión de PHP: 7.3.9
 
@@ -141,7 +141,7 @@ CREATE TABLE `tutores` (
   `experiencia` text NOT NULL,
   `cv_tutor` varchar(20) DEFAULT NULL,
   `password_tutor` varchar(20) NOT NULL,
-  `img_tutor` text NOT NULL,
+  `img_tutor` text DEFAULT NULL,
   `fecha_nac_tutor` varchar(10) NOT NULL,
   `id_membresia` int(11) NOT NULL,
   `eliminado_tutor` enum('0','1') NOT NULL,
@@ -193,25 +193,32 @@ ALTER TABLE `estudiantes`
 -- Indices de la tabla `estudiante_materia`
 --
 ALTER TABLE `estudiante_materia`
-  ADD PRIMARY KEY (`id_estudiante_materia`);
+  ADD PRIMARY KEY (`id_estudiante_materia`),
+  ADD KEY `id_estudiante` (`id_estudiante`),
+  ADD KEY `id_materia` (`id_materia`);
 
 --
 -- Indices de la tabla `feedback_estudiante`
 --
 ALTER TABLE `feedback_estudiante`
-  ADD PRIMARY KEY (`id_feedback_estudiante`);
+  ADD PRIMARY KEY (`id_feedback_estudiante`),
+  ADD KEY `id_estudiante_materia` (`id_estudiante_materia`),
+  ADD KEY `id_tutor` (`id_tutor`);
 
 --
 -- Indices de la tabla `feedback_tutor`
 --
 ALTER TABLE `feedback_tutor`
-  ADD PRIMARY KEY (`id_feedback_tutor`);
+  ADD PRIMARY KEY (`id_feedback_tutor`),
+  ADD KEY `id_tutor_materia` (`id_tutor_materia`),
+  ADD KEY `id_estudiante` (`id_estudiante`);
 
 --
 -- Indices de la tabla `materias`
 --
 ALTER TABLE `materias`
-  ADD PRIMARY KEY (`id_materia`);
+  ADD PRIMARY KEY (`id_materia`),
+  ADD KEY `id_categoria` (`id_categoria`);
 
 --
 -- Indices de la tabla `membresia`
@@ -223,19 +230,24 @@ ALTER TABLE `membresia`
 -- Indices de la tabla `tutores`
 --
 ALTER TABLE `tutores`
-  ADD PRIMARY KEY (`id_tutor`);
+  ADD PRIMARY KEY (`id_tutor`),
+  ADD KEY `id_membresia` (`id_membresia`);
 
 --
 -- Indices de la tabla `tutor_materia`
 --
 ALTER TABLE `tutor_materia`
-  ADD PRIMARY KEY (`id_tutor_materia`);
+  ADD PRIMARY KEY (`id_tutor_materia`),
+  ADD KEY `id_tutor` (`id_tutor`),
+  ADD KEY `id_materia` (`id_materia`);
 
 --
 -- Indices de la tabla `ventas`
 --
 ALTER TABLE `ventas`
-  ADD PRIMARY KEY (`id_venta`);
+  ADD PRIMARY KEY (`id_venta`),
+  ADD KEY `id_tutor_materia` (`id_tutor_materia`),
+  ADD KEY `id_estudiante` (`id_estudiante`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -300,6 +312,57 @@ ALTER TABLE `tutor_materia`
 --
 ALTER TABLE `ventas`
   MODIFY `id_venta` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `estudiante_materia`
+--
+ALTER TABLE `estudiante_materia`
+  ADD CONSTRAINT `estudiante_materia_ibfk_1` FOREIGN KEY (`id_estudiante`) REFERENCES `estudiantes` (`id_estudiante`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `estudiante_materia_ibfk_2` FOREIGN KEY (`id_materia`) REFERENCES `materias` (`id_materia`) ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `feedback_estudiante`
+--
+ALTER TABLE `feedback_estudiante`
+  ADD CONSTRAINT `feedback_estudiante_ibfk_1` FOREIGN KEY (`id_estudiante_materia`) REFERENCES `estudiante_materia` (`id_estudiante_materia`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `feedback_estudiante_ibfk_2` FOREIGN KEY (`id_tutor`) REFERENCES `tutores` (`id_tutor`) ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `feedback_tutor`
+--
+ALTER TABLE `feedback_tutor`
+  ADD CONSTRAINT `feedback_tutor_ibfk_1` FOREIGN KEY (`id_tutor_materia`) REFERENCES `tutor_materia` (`id_tutor_materia`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `feedback_tutor_ibfk_2` FOREIGN KEY (`id_estudiante`) REFERENCES `estudiantes` (`id_estudiante`) ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `materias`
+--
+ALTER TABLE `materias`
+  ADD CONSTRAINT `materias_ibfk_1` FOREIGN KEY (`id_categoria`) REFERENCES `categorias` (`id_categoria`) ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `tutores`
+--
+ALTER TABLE `tutores`
+  ADD CONSTRAINT `tutores_ibfk_1` FOREIGN KEY (`id_membresia`) REFERENCES `membresia` (`id_membresia`) ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `tutor_materia`
+--
+ALTER TABLE `tutor_materia`
+  ADD CONSTRAINT `tutor_materia_ibfk_1` FOREIGN KEY (`id_tutor`) REFERENCES `tutores` (`id_tutor`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `tutor_materia_ibfk_2` FOREIGN KEY (`id_materia`) REFERENCES `materias` (`id_materia`) ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `ventas`
+--
+ALTER TABLE `ventas`
+  ADD CONSTRAINT `ventas_ibfk_1` FOREIGN KEY (`id_tutor_materia`) REFERENCES `tutor_materia` (`id_tutor_materia`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `ventas_ibfk_2` FOREIGN KEY (`id_estudiante`) REFERENCES `estudiantes` (`id_estudiante`) ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
