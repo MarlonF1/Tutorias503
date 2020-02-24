@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-02-2020 a las 01:14:41
+-- Tiempo de generación: 24-02-2020 a las 02:08:01
 -- Versión del servidor: 10.4.6-MariaDB-log
 -- Versión de PHP: 7.3.9
 
@@ -31,9 +31,18 @@ SET time_zone = "+00:00";
 CREATE TABLE `categorias` (
   `id_categoria` int(11) NOT NULL,
   `categoria` varchar(20) NOT NULL,
-  `img_categoria` text NOT NULL,
+  `img_categoria` text DEFAULT NULL,
   `eliminado_categoria` enum('0','1') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `categorias`
+--
+
+INSERT INTO `categorias` (`id_categoria`, `categoria`, `img_categoria`, `eliminado_categoria`) VALUES
+(1, 'Matematicas', NULL, '1'),
+(2, 'Programacion', NULL, '1'),
+(3, 'Electronica', NULL, '1');
 
 -- --------------------------------------------------------
 
@@ -113,6 +122,15 @@ CREATE TABLE `materias` (
   `eliminado_materia` enum('0','1') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `materias`
+--
+
+INSERT INTO `materias` (`id_materia`, `materia`, `descripcion`, `id_categoria`, `costo`, `eliminado_materia`) VALUES
+(1, 'Matematica Bachillerato', 'Con estas tutorias seras capas de salir de obtener mejores calificaciones, y sobresalir en matematicas', 1, 15, '1'),
+(2, 'PHP', 'Aprenderas a programar backend con el lenguaje PHP', 2, 20, '1'),
+(4, 'Arduino', 'Aprenderas a utilizar el microcontrolador arduino para tus proyectos estudiantiles o tambien para automatizar tu hogar', 3, 20, '1');
+
 -- --------------------------------------------------------
 
 --
@@ -123,6 +141,15 @@ CREATE TABLE `membresia` (
   `id_membresia` int(11) NOT NULL,
   `nivel` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `membresia`
+--
+
+INSERT INTO `membresia` (`id_membresia`, `nivel`) VALUES
+(1, 'Gratis'),
+(2, 'Premium'),
+(3, 'Administrador');
 
 -- --------------------------------------------------------
 
@@ -148,6 +175,13 @@ CREATE TABLE `tutores` (
   `descripcion_tutor` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `tutores`
+--
+
+INSERT INTO `tutores` (`id_tutor`, `nombre_tutor`, `apellido_tutor`, `dui_tutor`, `cel_tutor`, `tel_tutor`, `email_tutor`, `experiencia`, `cv_tutor`, `password_tutor`, `img_tutor`, `fecha_nac_tutor`, `id_membresia`, `eliminado_tutor`, `descripcion_tutor`) VALUES
+(1, 'Marlon', 'Fernandez', '12345678-9', '7649-0659', '7649-0659', 'marlon.fdez77@gmail.com', 'Prueba de administrador', NULL, '12345', NULL, '23-11-1997', 3, '1', 'Prueba');
+
 -- --------------------------------------------------------
 
 --
@@ -159,6 +193,15 @@ CREATE TABLE `tutor_materia` (
   `id_tutor` int(11) NOT NULL,
   `id_materia` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `tutor_materia`
+--
+
+INSERT INTO `tutor_materia` (`id_tutor_materia`, `id_tutor`, `id_materia`) VALUES
+(1, 1, 1),
+(2, 1, 4),
+(3, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -257,7 +300,7 @@ ALTER TABLE `ventas`
 -- AUTO_INCREMENT de la tabla `categorias`
 --
 ALTER TABLE `categorias`
-  MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `estudiantes`
@@ -287,25 +330,25 @@ ALTER TABLE `feedback_tutor`
 -- AUTO_INCREMENT de la tabla `materias`
 --
 ALTER TABLE `materias`
-  MODIFY `id_materia` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_materia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `membresia`
 --
 ALTER TABLE `membresia`
-  MODIFY `id_membresia` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_membresia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `tutores`
 --
 ALTER TABLE `tutores`
-  MODIFY `id_tutor` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_tutor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `tutor_materia`
 --
 ALTER TABLE `tutor_materia`
-  MODIFY `id_tutor_materia` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_tutor_materia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `ventas`
