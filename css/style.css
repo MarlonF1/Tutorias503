@@ -1018,3 +1018,13 @@ link:focus,
 }
 
 /*# sourceMappingURL=maps/style.css.map */
+
+/* PRUEBAS CARRITO */
+
+
+.popover
+		{
+		    width: 100%;
+		    max-width: 800px;
+		}
+
